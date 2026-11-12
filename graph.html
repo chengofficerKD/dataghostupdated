@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataGhost Graph</title>
+    <link rel="stylesheet" href="graph.css">
+</head>
+<body>
+    <div class="window-shell">
+        <!-- Minimalist macOS-style Header Bar -->
+        <header class="window-header">
+            <div class="header-left">
+                <span class="app-dot"></span>
+                <span class="header-title" id="graphTitle">DataGhost — Live Node Map</span>
+            </div>
+
+            <div class="header-stats">
+                <div class="stat-item"><span id="nodeCount">0</span> <span class="stat-label">nodes</span></div>
+                <span class="stat-sep">/</span>
+                <div class="stat-item"><span id="connectionCount">0</span> <span class="stat-label">links</span></div>
+                <div class="status-indicator">
+                    <span class="live-dot"></span>
+                    <span>Live</span>
+                </div>
+            </div>
+
+            <div class="header-controls">
+                <button class="tool-btn" id="btnResetView" title="Reset View">Reset</button>
+            </div>
+        </header>
+
+        <!-- Canvas Workspace -->
+        <div class="canvas-workspace">
+            <canvas id="brainCanvas"></canvas>
+
+            <!-- Refined Legend (Bottom Left) -->
+            <div class="legend-card">
+                <div class="legend-title">Categories</div>
+                <div class="legend-list">
+                    <div class="legend-item"><span class="dot dot-primary"></span><span>Primary Site</span></div>
+                    <div class="legend-item"><span class="dot dot-auth"></span><span>Authentication</span></div>
+                    <div class="legend-item"><span class="dot dot-tracker"></span><span>Trackers & Ads</span></div>
+                    <div class="legend-item"><span class="dot dot-api"></span><span>API Services</span></div>
+                    <div class="legend-item"><span class="dot dot-analytics"></span><span>Analytics</span></div>
+                    <div class="legend-item"><span class="dot dot-service"></span><span>Recognized Service</span></div>
+                    <div class="legend-item"><span class="dot dot-infra"></span><span>Infrastructure</span></div>
+                    <div class="legend-item"><span class="dot dot-unknown"></span><span>Unknown</span></div>
+                </div>
+            </div>
+
+            <!-- Sleek Inspector Popover -->
+            <div class="inspector-card" id="inspectorCard" style="display: none;">
+                <div class="inspector-header">
+                    <span class="cat-pill" id="inspectCat">Category</span>
+                    <button class="close-btn" id="btnCloseInspect">×</button>
+                </div>
+                <div class="inspect-host" id="inspectHost">host.com</div>
+                <div class="inspect-details">
+                    <div class="detail-row">
+                        <span>Requests:</span>
+                        <strong id="inspectCount">0</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span>Transport:</span>
+                        <strong id="inspectSec">Not observed</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="graph.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+# DataGhost Chrome Extension — Project Status
+Last updated: 2026-11-12
+
+## Overview
+DataGhost is a Manifest V3 Chrome extension with three user-facing tools:
+1. **Website Informant** reports reputation and transport warnings for the active site.
+2. **Data Detective** visualizes observed browser request destinations and connections.
+3. **Vault** tracks sites where a user submits a login or signup form and checks those site domains against known breach records.
+
+Vault stores site domains and status metadata only. Password values are never read or stored. A site-level breach record does not confirm that the user's account was exposed.
+
+## Current Files
+| Files | Role |
+|---|---|
+| `manifest.json` | MV3 permissions, service worker, content script, popup, and web-accessible windows. |
+| `background.js` | Reputation checks, request collection, domain normalization and DNS verification, Vault persistence, daily alarm, and notifications. |
+| `content.js` | Scans page structure for auth forms; reports only a trusted login/signup button activation or form submission when that form contains a password input. |
+| `popup.html`, `popup.js`, `style.css` | Website status, login-form feedback, observed-traffic preview, and navigation to Vault and graph. |
+| `graph.html`, `graph.js`, `graph.css` | 680×500 floating request-destination graph with observed nodes, links, and transport inspector. |
+| `vault.html`, `vault.js`, `vault.css` | 680×500 site monitor with auto/manual labels, DNS-verified manual addition, daily checks, and breach status. |
+
+## Functionality
+### Website Informant
+- Runs reputation checks for navigated websites using Cloudflare Security DNS, ICANN RDAP, and local heuristics.
+- Shows a threat warning for flagged domains or unencrypted HTTP. Safe browsing does not generate a notification or badge.
+- Reputation checks are best-effort; “no known threat” is not a guarantee of safety.
+
+### Data Detective
+- Collects HTTP/HTTPS destination hostnames and request counts through `webRequest`.
+- Builds graph links from observed connections; displays an empty/waiting state instead of fabricated demo traffic.
+- Popup preview and graph use observed tab data. The graph opens in a 680×500 Chrome popup window.
+
+### Login / Signup Detection
+- Detects password inputs, credential autocomplete hints, SSO buttons, and form targets without reading input values.
+- Merely opening a page with a password field does **not** add it to Vault.
+- A trusted text-insertion event on a password input sends a `PASSWORD_FIELD_USED` event. The service worker derives the domain from the sender tab URL, normalizes it to the registrable domain, and deduplicates it in storage.
+- Page load, login-button clicks, show-password controls, and unrelated buttons do not save a site. The content script never reads the password value; it sends only the event type.
+
+### Vault
+- Sites are automatically tracked after a login/signup action, or can be added manually.
+- Manual entries are parsed and normalized, then checked for A/AAAA DNS resolution before storage. Invalid, non-resolving, and duplicate domains are rejected.
+- Starts a repeating `chrome.alarms` check 24 hours after the first site is tracked, then checks every 24 hours against HIBP's public `/api/v3/breaches` catalogue. The catalogue is fetched once per run and matched locally against verified, non-fabricated site records; monitored domains and account details are not sent to HIBP.
+- Notifies on a newly detected site breach and shows breach titles in Vault. A listed site breach is not evidence that a specific user's account was compromised.
+- Unknown/error results are not shown as safe. HIBP attribution is shown in the Vault.
+
+## Design
+- **Ghost Protocol** visual system: `#0d0e11` canvas, `#121316` surfaces, `#1a1b1e` elevated surfaces, subtle white hairline borders.
+- Semantic accents: coral `#f28b82` for threats, emerald `#81c995` for clean states, amber `#fdd663` for tracking/caution, and soft blue `#8ab4f8` for primary actions. Graph categories also use distinct teal, cyan, and orange hues; red is reserved for actual threats.
+- Font stacks prefer Plus Jakarta Sans for UI and JetBrains Mono for telemetry, with local system fallbacks. No remote font dependency is loaded.
+- Toolbar popup: 285px wide, max-height 580px, scrollable. Graph and Vault are 680×500 floating windows.
+- Implemented with the project's local CSS; there is no Tailwind build pipeline.
+
+## External Services
+| Service | Purpose | Authorization |
+|---|---|---|
+| Cloudflare DNS-over-HTTPS | Reputation and manual-domain DNS resolution | No API key |
+| RDAP (`rdap.org`) | Domain registration information | No API key |
+| HIBP `/api/v3/breaches` | Public site breach catalogue | No API key; site matching is local |
+
+## Verification Performed
+- Browser tests with mocked Chrome and DNS services: page load and login/show-password buttons do not save; password entry emits one deduplicated event; password values are absent from messages.
+- Background tests: hostname normalization, duplicate handling, manual syntax/DNS rejection, valid manual add, 24-hour alarm scheduling, verified breach matching, lookalike/unverified exclusion, and notification deduplication.
+- Vault UI test: invalid domain remains unsaved, valid domain appears once as MANUAL, and normalized duplicate is rejected.
+- Editor diagnostics report no errors in the changed scripts.
+- Not yet verified against an installed Chrome extension or live DNS/HIBP responses. Node.js is unavailable in the current environment.
+
+## Known Limitations
+- HIBP site-catalogue matching reports a site-level breach only; it cannot confirm the user's account or credentials were affected.
+- The graph reports HTTPS/HTTP transport but does not collect TLS version, request latency, HTTP headers, DNR rule IDs, or entropy scores.
+- Website reputation checks are best-effort and may be inconclusive or slow for some domains.
+- Chrome MV3 service workers can be suspended between events; alarms are used for daily Vault checks.
+
+## Load in Chrome
+1. Open `chrome://extensions` and enable Developer mode.
+2. Choose **Load unpacked** and select the DataGhost project directory.
+3. Pin DataGhost to the toolbar.

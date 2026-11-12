@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataGhost</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="google-app">
+        <!-- Google Material Header Bar -->
+        <header class="app-header">
+            <div class="brand-box">
+                <div class="google-logo-glyph">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a8 8 0 0 0-8 8v12l3-2 3 2 3-2 3 2 3-2 1-1V10a8 8 0 0 0-8-8z"/>
+                    </svg>
+                </div>
+                <span class="app-name">DataGhost</span>
+            </div>
+            
+            <div class="host-chip" id="hostChip">
+                <svg class="lock-icon" id="lockIcon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12v11H6z"/>
+                </svg>
+                <span class="host-name" id="hostName">Loading...</span>
+            </div>
+        </header>
+
+        <!-- 1. WEBSITE INFORMANT (Multi-Database Legitimacy Status) -->
+        <section class="card informant-card" id="informantCard">
+            <div class="card-lead">
+                <div class="status-avatar" id="statusAvatar">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                </div>
+                <div class="lead-text">
+                    <h2 class="status-headline" id="statusTitle">Verifying Website...</h2>
+                    <p class="status-category" id="statusCategory">Checking open reputation databases</p>
+                </div>
+            </div>
+
+            <!-- Verification Badges -->
+            <div class="chips-row" id="verificationChips">
+                <span class="chip chip-blue" id="chipCategory">General Web</span>
+                <span class="chip chip-muted" id="chipDns">DNS: Checking</span>
+                <span class="chip chip-muted" id="chipRdap">RDAP: Checking</span>
+            </div>
+
+            <!-- Threat Alert Notice (Visible ONLY when spam/phishing/bad) -->
+            <div class="threat-alert-box" id="threatAlertBox" style="display: none;">
+                <span class="alert-icon">&#x26A0;&#xFE0F;</span>
+                <span class="alert-text" id="threatAlertText">Suspicious website detected. Do not enter credentials.</span>
+            </div>
+        </section>
+
+        <!-- 2. LOGIN & SIGN-IN SCANNER FEATURE -->
+        <section class="card login-card" id="loginCard" style="display: none;">
+            <div class="login-header">
+                <div class="login-badge">
+                    <svg class="key-glyph" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M14 7a5 5 0 1 1-1.46-3.54A5 5 0 0 1 14 7ZM10.5 10.5 21 21m-4-4 2-2m-5-1 2-2"/>
+                    </svg>
+                    <span class="login-badge-text" id="loginBadgeText">Sign-in Page Active</span>
+                </div>
+                <span class="tag-status" id="loginSafetyTag">First-Party</span>
+            </div>
+            <p class="login-desc" id="loginDesc">Credentials transmit directly to the verified destination.</p>
+        </section>
+
+        <!-- 3. DATA DETECTIVE -->
+        <section class="card detective-card">
+            <div class="detective-header">
+                <div class="detective-info">
+                    <h3 class="detective-heading">Data Detective</h3>
+                    <p class="detective-sub">Real-time destination node monitor</p>
+                </div>
+                <div class="live-pill">
+                    <span class="live-pulse"></span>
+                    <span>Live</span>
+                </div>
+            </div>
+
+            <!-- Cropped Live Preview Frame -->
+            <div class="cropped-frame">
+                <canvas id="miniCanvas" width="308" height="90"></canvas>
+                <div class="preview-empty" id="miniPreviewEmpty" aria-live="polite">Waiting for observed destinations</div>
+            </div>
+
+            <!-- Material Telemetry Row -->
+            <div class="material-metrics">
+                <div class="metric-col">
+                    <span class="metric-val" id="metricDestinations">0</span>
+                    <span class="metric-key">Destinations</span>
+                </div>
+                <div class="metric-col">
+                    <span class="metric-val" id="metricTrackers">0</span>
+                    <span class="metric-key">Trackers</span>
+                </div>
+                <div class="metric-col">
+                    <span class="metric-val" id="metricPosts">0</span>
+                    <span class="metric-key">POST Streams</span>
+                </div>
+            </div>
+
+            <!-- Open Cropped Standalone Window Button -->
+            <button class="google-btn" id="btnOpenGraph">
+                <span class="btn-text">Open Node Graph Window</span>
+                <span class="btn-icon">&#x2197;</span>
+            </button>
+        </section>
+
+        <!-- Google-style Minimal Footer -->
+        <footer class="app-footer">
+            <span>Cloudflare DoH &amp; ICANN RDAP</span>
+            <div class="footer-actions">
+                <button class="vault-nav-btn" id="btnOpenVault" title="Password Site Monitor">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12v11H6z"/></svg>
+                    <span>Vault</span>
+                </button>
+                <button class="refresh-btn" id="btnRefresh" title="Refresh">&#x21BB;</button>
+            </div>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

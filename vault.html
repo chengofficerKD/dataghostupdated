@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DataGhost Vault</title>
+    <link rel="stylesheet" href="vault.css">
+</head>
+<body>
+    <div class="vault-app">
+
+        <!-- Header -->
+        <header class="vault-header">
+            <div class="brand-box">
+                <div class="shield-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Vault</span>
+                    <span class="brand-sub">Password Site Monitor</span>
+                </div>
+            </div>
+            <button class="icon-btn" id="btnCheckNow" title="Check all sites for breaches now">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                </svg>
+            </button>
+        </header>
+
+        <section class="auto-track-banner" aria-label="Automatic password site detection">
+            <span class="auto-track-indicator"></span>
+            <div class="auto-track-copy">
+                <strong>Password sites detected automatically</strong>
+                <span>Only site domains are stored. Password values are never read.</span>
+            </div>
+        </section>
+
+        <!-- Breach Alert Banner (shown only when a breach is found) -->
+        <div class="breach-banner" id="breachBanner" style="display:none;">
+            <div class="breach-banner-icon">!</div>
+            <div class="breach-banner-text">
+                <strong id="breachBannerTitle">Sites Compromised</strong>
+                <span id="breachBannerSub">Your data may be exposed. See details below.</span>
+            </div>
+        </div>
+
+        <!-- Add site form -->
+        <div class="add-site-box">
+            <div class="add-site-label">Add a site manually</div>
+            <div class="add-site-row">
+                <input type="text" id="siteInput" class="site-input" placeholder="e.g. github.com" spellcheck="false" autocomplete="off">
+                <button class="add-btn" id="btnAddSite">Add</button>
+            </div>
+            <div class="add-site-hint" id="addSiteHint"></div>
+        </div>
+
+        <!-- Divider -->
+        <div class="section-label">
+            <span>Monitored Sites</span>
+            <span class="site-count" id="siteCountLabel">0 sites</span>
+        </div>
+
+        <!-- Site list -->
+        <div class="site-list" id="siteList">
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🔐</div>
+                <div class="empty-title">No sites tracked yet</div>
+                <div class="empty-desc">Sites are added when DataGhost detects a password field. You can also add one manually.</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="vault-footer">
+            <span>Daily site checks · Source: <a href="https://haveibeenpwned.com/" target="_blank" rel="noreferrer">Have I Been Pwned</a></span>
+        </footer>
+    </div>
+
+    <script src="vault.js"></script>
+</body>
+</html>

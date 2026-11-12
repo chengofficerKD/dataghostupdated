@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "DataGhost",
+  "version": "1.4.0",
+  "description": "Real-time AI brain node graph, instant website security alerts, and daily password breach monitoring.",
+  "permissions": [
+    "webRequest",
+    "webNavigation",
+    "storage",
+    "tabs",
+    "notifications",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "DataGhost - Data Detective & Website Informant"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["graph.html", "vault.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
